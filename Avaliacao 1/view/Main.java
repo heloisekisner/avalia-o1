@@ -93,7 +93,7 @@ public class Main {
 
         switch (opcao) {
             case 1:
-                System.out.print("Digite a matrícula: ");
+                System.out.print("Digite a matrícula (Exemplo: F+010): ");
                 String matricula = scanner.nextLine();
                 System.out.print("Digite o departamento: ");
                 String departamento = scanner.nextLine();
