@@ -1,23 +1,28 @@
-CREATE DATABASE IF NOT EXISTS empresa;
+DROP DATABASE IF EXISTS empresa;
+CREATE DATABASE empresa;
 USE empresa;
 
+-- Criação de usuário 
 CREATE USER IF NOT EXISTS 'devuser'@'localhost' IDENTIFIED BY '1234';
 GRANT ALL PRIVILEGES ON empresa.* TO 'devuser'@'localhost';
 FLUSH PRIVILEGES;
 
+-- Tabela pessoa
 CREATE TABLE pessoa (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL
 );
 
+-- Tabela funcionario (herda id da pessoa)
 CREATE TABLE funcionario (
-    id INT PRIMARY KEY auto_increment,
-    matricula VARCHAR(4) NOT NULL,
+    id INT PRIMARY KEY,
+    matricula VARCHAR(4) NOT NULL UNIQUE,
     departamento VARCHAR(50) NOT NULL,
     FOREIGN KEY (id) REFERENCES pessoa(id)
 );
 
+-- Tabela projeto
 CREATE TABLE projeto (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(100) NOT NULL,
@@ -26,6 +31,8 @@ CREATE TABLE projeto (
     FOREIGN KEY (id_funcionario) REFERENCES funcionario(id)
 );
 
+-- Inserção nas tabelas passo a passo
+-- Primeiro: insere pessoas normalmente, deixando o MySQL gerar o ID
 INSERT INTO pessoa (nome, email) VALUES
 ('Carlos Silva', 'carlos@email.com'),
 ('Ana Souza', 'ana@email.com'),
@@ -38,6 +45,12 @@ INSERT INTO pessoa (nome, email) VALUES
 ('Fernanda Rocha', 'fernanda@email.com'),
 ('Guilherme Lopes', 'guilherme@email.com');
 
+-- Agora: pega os IDs gerados para pessoa
+-- (você pode rodar isso para confirmar)
+SELECT * FROM pessoa;
+
+-- Agora insere os funcionários usando os mesmos IDs
+-- 🚨 Esses IDs DEVEM ser iguais aos gerados acima (de 1 a 10)
 INSERT INTO funcionario (id, matricula, departamento) VALUES
 (1, 'F001', 'TI'),
 (2, 'F002', 'RH'),
@@ -50,6 +63,7 @@ INSERT INTO funcionario (id, matricula, departamento) VALUES
 (9, 'F009', 'TI'),
 (10, 'F010', 'Comercial');
 
+-- Inserir projetos
 INSERT INTO projeto (nome, descricao, id_funcionario) VALUES
 ('Sistema ERP', 'Implantação de ERP para gestão da empresa.', 1),
 ('Campanha RH', 'Campanha de endomarketing para colaboradores.', 2),
@@ -62,10 +76,12 @@ INSERT INTO projeto (nome, descricao, id_funcionario) VALUES
 ('Sistema BI', 'Implementação de Business Intelligence.', 9),
 ('Expansão Comercial', 'Plano de expansão para novas regiões.', 10);
 
-select * from pessoa;
-select * from funcionario;
-select * from projeto;
+-- Consulta para verificar tudo
+SELECT * FROM pessoa;
+SELECT * FROM funcionario;
+SELECT * FROM projeto;
 
 drop table pessoa;
 drop table funcionario;
 drop table projeto;
+
