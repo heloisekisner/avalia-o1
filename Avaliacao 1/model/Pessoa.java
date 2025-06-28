@@ -1,24 +1,29 @@
 package model;
 
+// Classe que representa uma Pessoa com id, nome e email
 public class Pessoa {
     private int id;
     private String nome;
     private String email;
 
+    // Construtor vazio (obrigatório para JavaBeans e frameworks)
     public Pessoa() {
     }
 
+    // Construtor sem ID (para novos cadastros)
     public Pessoa(String nome, String email) {
         this.nome = nome;
         this.email = email;
     }
 
+    // Construtor completo
     public Pessoa(int id, String nome, String email) {
         this.id = id;
         this.nome = nome;
         this.email = email;
     }
 
+    // Representação da Pessoa como string (útil para debug ou exibição)
     @Override
     public String toString() {
         return "Pessoa{" +
@@ -28,6 +33,7 @@ public class Pessoa {
                 '}';
     }
 
+    // Getters e setters
     public int getId() {
         return id;
     }
