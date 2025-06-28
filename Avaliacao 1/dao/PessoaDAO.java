@@ -6,6 +6,7 @@ import util.ConnectionFactory;
 
 public class PessoaDAO {
 
+    // Método para inserir uma nova pessoa no banco
     public void inserir(Pessoa pessoa) {
         try (Connection con = ConnectionFactory.getConnection()) {
             String sql = "INSERT INTO pessoa (nome, email) VALUES (?, ?)";
@@ -19,6 +20,7 @@ public class PessoaDAO {
         }
     }
 
+    // Atualiza o e-mail de uma pessoa com base no nome
     public void atualizar(Pessoa pessoa) {
         try (Connection con = ConnectionFactory.getConnection()) {
             String sql = "UPDATE pessoa SET email = ? WHERE nome = ?";
@@ -36,6 +38,7 @@ public class PessoaDAO {
         }
     }
 
+    // Busca uma pessoa pelo nome e retorna o objeto Pessoa
     public Pessoa buscarPorNome(String nome) {
         try (Connection con = ConnectionFactory.getConnection()) {
             String sql = "SELECT * FROM pessoa WHERE nome = ?";
@@ -51,6 +54,7 @@ public class PessoaDAO {
         return null;
     }
 
+    // Exclui uma pessoa se ela não estiver vinculada como funcionário
     public void excluirPorNome(String nome) {
         try (Connection con = ConnectionFactory.getConnection()) {
             Pessoa pessoa = buscarPorNome(nome);
@@ -59,6 +63,7 @@ public class PessoaDAO {
                 return;
             }
 
+            // Verifica se a pessoa está vinculada a um funcionário
             String sqlCheck = "SELECT * FROM funcionario WHERE id = ?";
             PreparedStatement checkStmt = con.prepareStatement(sqlCheck);
             checkStmt.setInt(1, pessoa.getId());
@@ -69,6 +74,7 @@ public class PessoaDAO {
                 return;
             }
 
+            // Exclui a pessoa
             String sql = "DELETE FROM pessoa WHERE id = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setInt(1, pessoa.getId());
