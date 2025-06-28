@@ -1,4 +1,3 @@
-// FuncionarioDAO atualizado para trabalhar com matricula e departamento
 package dao;
 
 import java.sql.*;
@@ -7,19 +6,22 @@ import util.ConnectionFactory;
 
 public class FuncionarioDAO {
 
+    // Método para inserir um funcionário (requer que Pessoa já exista e o ID seja passado)
     public void inserir(Funcionario funcionario) {
         try (Connection con = ConnectionFactory.getConnection()) {
-            String sql = "INSERT INTO funcionario (matricula, departamento) VALUES (?, ?)";
+            String sql = "INSERT INTO funcionario (id, matricula, departamento) VALUES (?, ?, ?)";
             PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, funcionario.getMatricula());
-            stmt.setString(2, funcionario.getDepartamento());
+            stmt.setInt(1, funcionario.getId()); // o ID vem da tabela Pessoa
+            stmt.setString(2, funcionario.getMatricula());
+            stmt.setString(3, funcionario.getDepartamento());
             stmt.executeUpdate();
-            System.out.println("Funcionário cadastrado com sucesso.");
+            System.out.println("Funcionario cadastrado com sucesso.");
         } catch (Exception e) {
-            System.out.println("Erro ao cadastrar funcionário: " + e.getMessage());
+            System.out.println("Erro ao cadastrar Funcionario: " + e.getMessage());
         }
     }
 
+    // Atualiza o departamento de um funcionário baseado na matrícula
     public void atualizar(Funcionario funcionario) {
         try (Connection con = ConnectionFactory.getConnection()) {
             String sql = "UPDATE funcionario SET departamento = ? WHERE matricula = ?";
@@ -37,6 +39,7 @@ public class FuncionarioDAO {
         }
     }
 
+    // Busca um funcionário pela matrícula
     public Funcionario buscarPorMatricula(String matricula) {
         try (Connection con = ConnectionFactory.getConnection()) {
             String sql = "SELECT * FROM funcionario WHERE matricula = ?";
@@ -51,6 +54,8 @@ public class FuncionarioDAO {
         }
         return null;
     }
+
+    // Exclui um funcionário pela matrícula, se não estiver vinculado a um funcionario
 
     public void excluirPorMatricula(String matricula) {
         try (Connection con = ConnectionFactory.getConnection()) {
