@@ -1,16 +1,20 @@
 package view;
 
-import model.*;
+// Importação das classes DAO e utilitários
 import dao.*;
 import java.util.Scanner;
+import model.*;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+
+        // Instanciando os objetos DAO
         PessoaDAO pessoaDAO = new PessoaDAO();
         FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
         ProjetoDAO projetoDAO = new ProjetoDAO();
 
+        // Loop principal do menu
         while (true) {
             System.out.println("--- Menu Principal ---");
             System.out.println("1. Gerenciar Pessoas");
@@ -20,8 +24,9 @@ public class Main {
             System.out.print("Escolha uma opção: ");
 
             int opcao = scanner.nextInt();
-            scanner.nextLine();
+            scanner.nextLine(); // limpar o buffer
 
+            // Seleção do submenu conforme a opção
             switch (opcao) {
                 case 1:
                     gerenciarPessoas(scanner, pessoaDAO);
@@ -42,6 +47,7 @@ public class Main {
         }
     }
 
+    // Submenu para Pessoas
     private static void gerenciarPessoas(Scanner scanner, PessoaDAO pessoaDAO) {
         System.out.println("--- Gerenciar Pessoas ---");
         System.out.println("1. Cadastrar Pessoa");
@@ -81,6 +87,7 @@ public class Main {
         }
     }
 
+    // Submenu para Funcionários
     private static void gerenciarFuncionarios(Scanner scanner, FuncionarioDAO funcionarioDAO) {
         System.out.println("--- Gerenciar Funcionários ---");
         System.out.println("1. Cadastrar Funcionário");
@@ -93,11 +100,19 @@ public class Main {
 
         switch (opcao) {
             case 1:
+                // Cadastrar funcionário exige que a pessoa já exista
+                System.out.print("Digite o nome da pessoa já cadastrada: ");
+                String nomePessoa = scanner.nextLine();
+                Pessoa pessoaFuncionario = new PessoaDAO().buscarPorNome(nomePessoa);
+                if (pessoaFuncionario == null) {
+                    System.out.println("Pessoa não encontrada. Cadastre a pessoa primeiro.");
+                    break;
+                }
                 System.out.print("Digite a matrícula (Exemplo: F+010): ");
                 String matricula = scanner.nextLine();
                 System.out.print("Digite o departamento: ");
                 String departamento = scanner.nextLine();
-                funcionarioDAO.inserir(new Funcionario(0, matricula, departamento));
+                funcionarioDAO.inserir(new Funcionario(pessoaFuncionario.getId(), matricula, departamento));
                 break;
             case 2:
                 System.out.print("Digite a matrícula do funcionário: ");
@@ -120,6 +135,7 @@ public class Main {
         }
     }
 
+    // Submenu para Projetos
     private static void gerenciarProjetos(Scanner scanner, ProjetoDAO projetoDAO) {
         System.out.println("--- Gerenciar Projetos ---");
         System.out.println("1. Cadastrar Projeto");
