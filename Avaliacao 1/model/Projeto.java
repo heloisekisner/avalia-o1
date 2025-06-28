@@ -1,14 +1,17 @@
 package model;
 
+// Classe que representa um Projeto no sistema
 public class Projeto {
     private int id;
     private String nome;
     private String descricao;
-    private int idFuncionario;
+    private int idFuncionario; // ID do funcionário responsável
 
+    // Construtor vazio
     public Projeto() {
     }
 
+    // Construtor completo
     public Projeto(int id, String nome, String descricao, int idFuncionario) {
         this.id = id;
         this.nome = nome;
@@ -16,6 +19,7 @@ public class Projeto {
         this.idFuncionario = idFuncionario;
     }
 
+    // Exibe os dados do projeto
     @Override
     public String toString() {
         return "Projeto {" +
@@ -26,6 +30,7 @@ public class Projeto {
                 '}';
     }
 
+    // Getters e setters
     public int getId() {
         return id;
     }
