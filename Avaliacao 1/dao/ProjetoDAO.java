@@ -1,4 +1,3 @@
-// ProjetoDAO atualizado para trabalhar corretamente
 package dao;
 
 import java.sql.*;
@@ -7,6 +6,7 @@ import util.ConnectionFactory;
 
 public class ProjetoDAO {
 
+    // Insere um novo projeto no banco de dados
     public void inserir(Projeto projeto) {
         try (Connection con = ConnectionFactory.getConnection()) {
             String sql = "INSERT INTO projeto (nome, descricao, id_funcionario) VALUES (?, ?, ?)";
@@ -17,10 +17,11 @@ public class ProjetoDAO {
             stmt.executeUpdate();
             System.out.println("Projeto cadastrado com sucesso.");
         } catch (Exception e) {
-            System.out.println("Erro ao cadastrar projeto, Id do Funcionario nao exite");
+            System.out.println("Erro ao cadastrar projeto, Id do Funcionario nao existe");
         }
     }
 
+    // Atualiza os dados de um projeto
     public void atualizar(Projeto projeto) {
         try (Connection con = ConnectionFactory.getConnection()) {
             String sql = "UPDATE projeto SET nome = ?, descricao = ? WHERE id = ?";
@@ -39,6 +40,7 @@ public class ProjetoDAO {
         }
     }
 
+    // Busca um projeto pelo ID
     public Projeto buscarPorId(int id) {
         try (Connection con = ConnectionFactory.getConnection()) {
             String sql = "SELECT * FROM projeto WHERE id = ?";
@@ -46,8 +48,12 @@ public class ProjetoDAO {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new Projeto(rs.getInt("id"), rs.getString("nome"), rs.getString("descricao"),
-                        rs.getInt("id_funcionario"));
+                return new Projeto(
+                    rs.getInt("id"),
+                    rs.getString("nome"),
+                    rs.getString("descricao"),
+                    rs.getInt("id_funcionario")
+                );
             }
         } catch (Exception e) {
             System.out.println("Erro ao buscar projeto: " + e.getMessage());
@@ -55,6 +61,7 @@ public class ProjetoDAO {
         return null;
     }
 
+    // Exclui um projeto pelo ID
     public void excluirPorId(int id) {
         try (Connection con = ConnectionFactory.getConnection()) {
             String sql = "DELETE FROM projeto WHERE id = ?";
